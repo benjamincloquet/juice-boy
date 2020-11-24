@@ -1,5 +1,4 @@
 const passport = require('passport');
-const isAuthenticated = require('./middleware/isAuthenticated');
 const isGuildMember = require('./middleware/isGuildMember');
 
 module.exports = (router) => {
@@ -9,8 +8,8 @@ module.exports = (router) => {
     res.redirect('/api/user');
   });
 
-  router.get('/user', isAuthenticated, isGuildMember, (req, res) => {
-    res.status(200).send('Welcome!');
+  router.get('/user', isGuildMember, (req, res) => {
+    res.status(200).json(req.user);
   });
 
   router.get('/logout', (req, res) => {
