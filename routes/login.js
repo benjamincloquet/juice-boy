@@ -1,5 +1,6 @@
 const passport = require('passport');
 const isAuthenticated = require('./middleware/isAuthenticated');
+const isGuildMember = require('./middleware/isGuildMember');
 
 module.exports = (router) => {
   router.get('/login', passport.authenticate('discord'));
@@ -8,8 +9,7 @@ module.exports = (router) => {
     res.redirect('/api/user');
   });
 
-  router.get('/user', isAuthenticated, (req, res) => {
-    console.log(req.user);
+  router.get('/user', isAuthenticated, isGuildMember, (req, res) => {
     res.status(200).send('Welcome!');
   });
 

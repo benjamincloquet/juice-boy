@@ -5,7 +5,7 @@ const options = {
   clientID: process.env.CLIENT_ID,
   clientSecret: process.env.CLIENT_SECRET,
   callbackURL: process.env.CLIENT_CALLBACK_URL,
-  scope: ['identify', 'email', 'guilds'],
+  scope: ['identify'],
 };
 
 passport.serializeUser((user, done) => {

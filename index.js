@@ -19,6 +19,8 @@ app.use(passport.session());
 app.use(require('body-parser').json());
 app.use('/api', require('./routes'));
 
+require('./services/discord');
+
 app.listen(process.env.PORT, () => {
   console.log(`Server started in ${process.env.NODE_ENV} mode on port ${process.env.PORT}`);
 });
