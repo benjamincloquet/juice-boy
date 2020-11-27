@@ -1,11 +1,11 @@
 const passport = require('passport');
 const isGuildMember = require('./middleware/isGuildMember');
 
-module.exports = (router) => {
+exports.config = (router) => {
   router.get('/login', passport.authenticate('discord'));
 
   router.get('/login/callback', passport.authenticate('discord', { failureRedirect: '/' }), (req, res) => {
-    res.redirect('/api/user');
+    res.redirect('/');
   });
 
   router.get('/user', isGuildMember, (req, res) => {

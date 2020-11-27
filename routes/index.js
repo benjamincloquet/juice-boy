@@ -1,5 +1,6 @@
 const router = require('express').Router();
 
-require('./login')(router);
+require('./login').config(router);
+require('./playlists').config(router);
 
 module.exports = router;

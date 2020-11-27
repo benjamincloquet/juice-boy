@@ -1,6 +1,8 @@
 const { ytdl, isValidYoutubeURL, getVideoTitle } = require('./ytdl');
 const getFirstYoutubeSearchResult = require('./youtube').getFirstResult;
 
+const Playlist = require('../models/Playlist');
+
 const requestQueue = [];
 let currentRequest = null;
 
@@ -19,7 +21,7 @@ const joinVoiceChannel = async (context) => {
 };
 
 const playNextRequest = async () => {
-  currentRequest = requestQueue.pop();
+  currentRequest = requestQueue.shift();
   if (!currentRequest) {
     return;
   }
@@ -36,6 +38,35 @@ const playNextRequest = async () => {
   }
 };
 
+const addRequest = (request) => {
+  requestQueue.push(request);
+  request.context.textChannel.send(`🔊 ${request.title}`);
+  if (!currentRequest) {
+    playNextRequest();
+  }
+};
+
+const getPlaylist = async (name) => Playlist.findOne({ name });
+
+const playPlaylist = async (context, name) => {
+  try {
+    const playlist = await getPlaylist(name);
+    if (playlist) {
+      context.textChannel.send(`Playing playlist ${playlist.name}`);
+      playlist.songs.map((song) => (addRequest({
+        context,
+        url: song.url,
+        title: song.title,
+      })));
+      console.log(requestQueue);
+    } else {
+      context.textChannel.send("This playlist doesn't exist!");
+    }
+  } catch (err) {
+    context.textChannel.send("Coudln't get playlists!");
+  }
+};
+
 const processQuery = async (context, query) => {
   if (await isValidYoutubeURL(query)) {
     return { context, url: query, title: await getVideoTitle(query) };
@@ -49,16 +80,12 @@ const processQuery = async (context, query) => {
   }
 };
 
-const addRequest = async (context, query) => {
+const processRequest = async (context, query) => {
   const newRequest = await processQuery(context, query);
   if (!newRequest) {
     return;
   }
-  requestQueue.push(newRequest);
-  context.textChannel.send(`Added ${newRequest.title} to the queue.`);
-  if (!currentRequest) {
-    playNextRequest();
-  }
+  addRequest(newRequest);
 };
 
 const showRequestQueue = (context) => {
@@ -76,13 +103,27 @@ const showRequestQueue = (context) => {
   }
 };
 
+const clearRequestQueue = (context) => {
+  requestQueue.length = 0;
+  context.textChannel.send('Cleared the queue.');
+};
+
 exports.processCommand = (context, command, args) => {
   switch (command) {
     case 'play':
-      addRequest(context, args.join(' '));
+      processRequest(context, args.join(' '));
       break;
     case 'queue':
       showRequestQueue(context);
+      break;
+    case 'playlist':
+      playPlaylist(context, args.join(' '));
+      break;
+    case 'skip':
+      playNextRequest();
+      break;
+    case 'clear':
+      clearRequestQueue(context);
       break;
     default:
       context.textChannel.send(`"${command}" is not a command!`);
