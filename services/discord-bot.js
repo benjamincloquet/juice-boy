@@ -40,6 +40,7 @@ const playNextRequest = async () => {
 
 const addRequest = (request) => {
   requestQueue.push(request);
+  console.log('request:', request);
   request.context.textChannel.send(`🔊 ${request.title}`);
   if (!currentRequest) {
     playNextRequest();
