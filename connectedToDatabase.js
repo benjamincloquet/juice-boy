@@ -4,6 +4,6 @@ module.exports = (req, res, next) => {
   if (mongoose.connection.readyState === 1) {
     next();
   } else {
-    res.sendStatus(503);
+    res.status(503).json({ error: "Couldn't connect to database" });
   }
 };
