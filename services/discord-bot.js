@@ -40,7 +40,6 @@ const playNextRequest = async () => {
 
 const addRequest = (request) => {
   requestQueue.push(request);
-  console.log('request:', request);
   request.context.textChannel.send(`🔊 ${request.title}`);
   if (!currentRequest) {
     playNextRequest();
@@ -74,7 +73,8 @@ const processQuery = async (context, query) => {
   }
   try {
     const url = await getFirstYoutubeSearchResult(query);
-    return { context, url, title: await getVideoTitle(url) };
+    const title = await getVideoTitle(url);
+    return { context, url, title };
   } catch (err) {
     context.textChannel.send("Couldn't find any YouTube result for this term!");
     return null;
