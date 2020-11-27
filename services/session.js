@@ -6,6 +6,6 @@ module.exports = session({
   secret: process.env.SESSION_SECRET || 'abc123',
   resave: false,
   saveUninitialized: false,
-  cookie: { maxAge: process.env.COOKIE_MAX_AGE },
+  cookie: { maxAge: Number(process.env.COOKIE_MAX_AGE) },
   store: new MongoStore({ mongooseConnection: mongoose.connection }),
 });

@@ -1,9 +1,10 @@
 import { useContext } from 'react';
 import {
-  BrowserRouter as Router, Switch, Route, Redirect,
+  BrowserRouter as Router, Switch, Route,
 } from 'react-router-dom';
 import { UserContext } from './UserContext';
 import PlaylistPage from './playlists/PlaylistPage';
+import LoginPage from './LoginPage';
 import useUser from './useUser';
 
 const App = () => {
@@ -17,7 +18,7 @@ const App = () => {
     return (
       <Switch>
         <Route exact path="/">
-          {user.loggedIn ? <PlaylistPage /> : <Redirect to="/api/login" />}
+          {user.loggedIn ? <PlaylistPage /> : <LoginPage />}
         </Route>
       </Switch>
     );
