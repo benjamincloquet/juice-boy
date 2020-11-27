@@ -25,6 +25,10 @@ const springUpdate = (order, down, draggedItemOriginalIndex, draggedItemPrevious
 const DraggableList = ({ children, onChangeOrder }) => {
   const order = useRef(children.map((child, index) => index));
 
+  if (order.current.length !== children.length) {
+    order.current = children.map((child, index) => index);
+  }
+
   const [springs, setSprings] = useSprings(children.length, basicSpringUpdate(order.current));
 
   const setOrder = (newOrder) => {
