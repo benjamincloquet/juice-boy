@@ -34,6 +34,8 @@ const playNextRequest = async () => {
     const dispatcher = connection.play(await ytdl(url), { type: 'opus' });
     dispatcher.on('finish', playNextRequest);
   } catch (err) {
+    console.log('currentRequest:', currentRequest);
+    console.log(err);
     context.textChannel.send("Couldn't play the song!");
   }
 };

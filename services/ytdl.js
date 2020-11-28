@@ -9,6 +9,7 @@ exports.getVideoTitle = async (url) => {
     const videoInfo = await ytdl.getBasicInfo(url);
     return videoInfo.videoDetails.title;
   } catch (err) {
+    console.log(err);
     return null;
   }
 };
