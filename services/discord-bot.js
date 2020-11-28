@@ -58,7 +58,6 @@ const playPlaylist = async (context, name) => {
         url: song.url,
         title: song.title,
       })));
-      console.log(requestQueue);
     } else {
       context.textChannel.send("This playlist doesn't exist!");
     }
