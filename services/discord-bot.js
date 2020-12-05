@@ -31,7 +31,7 @@ const playNextRequest = async () => {
     return;
   }
   try {
-    const dispatcher = connection.play(await ytdl(url), { type: 'opus' });
+    const dispatcher = connection.play(ytdl(url));
     dispatcher.on('finish', playNextRequest);
   } catch (err) {
     console.log('currentRequest:', currentRequest);
